@@ -1,0 +1,5 @@
+coef.xtdhcoint          Coef Method for xtdhcoint Objects
+fisher_panel            Fisher Effect Panel Dataset
+print.xtdhcoint         Print Method for xtdhcoint Objects
+summary.xtdhcoint       Summary Method for xtdhcoint Objects
+xtdhcoint               Durbin-Hausman Panel Cointegration Tests
