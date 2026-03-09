@@ -21,6 +21,8 @@ Description: Implements the Durbin-Hausman panel cointegration tests of
     test statistics with automatic factor number selection via information 
     criteria.
 License: GPL-3
+URL: https://github.com/muhammedalkhalaf/xtdhcoint
+BugReports: https://github.com/muhammedalkhalaf/xtdhcoint/issues
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.5.0)
