@@ -65,7 +65,7 @@
 #' @references
 #' Westerlund, J. (2008). Panel cointegration tests of the Fisher effect.
 #' \emph{Journal of Applied Econometrics}, 23(2), 193--233.
-#' \doi{10.1002/jae.963}
+#' \doi{10.1002/jae.967}
 #'
 #' @examples
 #' # Load example data

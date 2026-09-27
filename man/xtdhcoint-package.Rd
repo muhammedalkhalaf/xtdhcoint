@@ -5,7 +5,7 @@
 \alias{xtdhcoint-package}
 \title{xtdhcoint: Durbin-Hausman Panel Cointegration Tests}
 \description{
-Implements the Durbin-Hausman panel cointegration tests of Westerlund (2008) \doi{10.1002/jae.963}. The tests are robust to cross-sectional dependence through common factor extraction using principal components. Provides both group-mean (DHg) and panel (DHp) test statistics with automatic factor number selection via information criteria.
+Implements the Durbin-Hausman panel cointegration tests of Westerlund (2008) \doi{10.1002/jae.967}. The tests are robust to cross-sectional dependence through common factor extraction using principal components. Provides both group-mean (DHg) and panel (DHp) test statistics with automatic factor number selection via information criteria.
 
 Implements the Durbin-Hausman panel cointegration tests of
 Westerlund (2008). The tests are robust to cross-sectional dependence
@@ -26,7 +26,7 @@ The main features include:
 \references{
 Westerlund, J. (2008). Panel cointegration tests of the Fisher effect.
 \emph{Journal of Applied Econometrics}, 23(2), 193--233.
-\doi{10.1002/jae.963}
+\doi{10.1002/jae.967}
 }
 \seealso{
 Useful links:
