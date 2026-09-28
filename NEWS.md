@@ -1,3 +1,8 @@
+# xtdhcoint 1.0.2
+
+* Corrected the DOI of Westerlund (2008) to 10.1002/jae.967 in DESCRIPTION, README, R and Rd files.
+* Authors@R updated; a former contributor entry was removed.
+
 # xtdhcoint 1.0.0
 
 * Initial CRAN release.
