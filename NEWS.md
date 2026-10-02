@@ -1,3 +1,7 @@
+# xtdhcoint 1.0.3
+
+* Removed an empty item from the author list of `xtdhcoint-package.Rd`, which caused an HTML validation NOTE ("trimming empty <li>"). No changes to code.
+
 # xtdhcoint 1.0.2
 
 * Corrected the DOI of Westerlund (2008) to 10.1002/jae.967 in DESCRIPTION, README, R and Rd files.

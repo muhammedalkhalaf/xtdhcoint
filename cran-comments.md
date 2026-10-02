@@ -1,14 +1,10 @@
-## xtdhcoint 1.0.2
+## xtdhcoint 1.0.3
 
-* Corrected the DOI of Westerlund (2008) to 10.1002/jae.967 in DESCRIPTION, README, R and Rd files.
-* Authors@R updated; a former contributor entry was removed.
-
-All DOIs in the package were verified against CrossRef before this submission.
+The version on CRAN is 1.0.1. 1.0.2 is under manual inspection and has the same HTML validation NOTE in xtdhcoint-package.Rd (empty <li>) that led to the rejection of two of my other packages; please discard 1.0.2 in favour of this version, which fixes it. 1.0.3 otherwise contains the 1.0.2 changes (corrected DOI of Westerlund 2008).
 
 ## Test environments
 
-* Ubuntu 24.04, R 4.3.3 (R CMD check --as-cran)
-* CRAN check results for the previous version: OK on all platforms
+* Ubuntu 24.04, R 4.3.3 and R-devel, R CMD check --as-cran
 
 ## R CMD check results
 

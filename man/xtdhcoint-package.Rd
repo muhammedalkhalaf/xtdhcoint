@@ -41,7 +41,6 @@ Useful links:
 
 Other contributors:
 \itemize{
-  \item
   \item Joakim Westerlund (Original GAUSS code author) [contributor]
 }
 
