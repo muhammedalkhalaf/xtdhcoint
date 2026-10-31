@@ -1,8 +1,8 @@
 Package: xtdhcoint
 Type: Package
 Title: Durbin-Hausman Panel Cointegration Tests
-Version: 1.0.3
-Date: 2026-09-30
+Version: 1.0.5
+Date: 2026-10-30
 Authors@R: c(
     person("Muhammad", "Alkhalaf", 
            email = "muhammedalkhalaf@gmail.com",
@@ -23,12 +23,7 @@ BugReports: https://github.com/muhammedalkhalaf/xtdhcoint/issues
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.5.0)
-Imports:
-    stats
-Suggests:
-    testthat (>= 3.0.0),
-    knitr,
-    rmarkdown
+Imports: stats
+Suggests: testthat (>= 3.0.0), knitr, rmarkdown
 RoxygenNote: 7.3.3
-URL: https://github.com/muhammedalkhalaf/xtdhcoint
-BugReports: https://github.com/muhammedalkhalaf/xtdhcoint/issues
+NeedsCompilation: no

@@ -25,8 +25,17 @@ print.xtdhcoint <- function(x, ...) {
 
   cat(rep("-", 70), "\n", sep = "")
   cat(sprintf("Panel dimensions:     N = %5d     T = %5d\n", x$N, x$TT))
+  if (isTRUE(x$n_dropped > 0)) {
+    cat(sprintf("Common time window:   %s to %s (%d observations dropped)\n",
+                format(x$time_window[1]), format(x$time_window[2]),
+                x$n_dropped))
+  }
   cat(sprintf("Number of regressors: K = %5d\n", x$K))
-  cat(sprintf("Estimated factors:    F = %5d\n", x$nf))
+  cat(sprintf("%s F = %5d%s\n",
+              if (is.null(x$nfactors)) "Estimated factors:   " else "Fixed factors:       ",
+              x$nf,
+              if (isTRUE(x$nf_at_kmax)) "  (upper bound kmax reached)"
+              else if (x$nf == 0L) "  (no factor removed)" else ""))
   cat(sprintf("Kernel bandwidth:     M = %5d\n", x$bandwidth))
   cat(rep("-", 70), "\n", sep = "")
   cat("\n")

@@ -27,6 +27,10 @@ The main features include:
 Westerlund, J. (2008). Panel cointegration tests of the Fisher effect.
 \emph{Journal of Applied Econometrics}, 23(2), 193--233.
 \doi{10.1002/jae.967}
+
+Bai, J. and Ng, S. (2002). Determining the number of factors in approximate
+factor models. \emph{Econometrica}, 70(1), 191--221.
+\doi{10.1111/1468-0262.00273}
 }
 \seealso{
 Useful links:

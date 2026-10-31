@@ -11,39 +11,61 @@ xtdhcoint(
   time,
   kmax = 5,
   criterion = c("ic", "pc", "aic", "bic"),
-  penalty = 1,
+  penalty = NULL,
   bandwidth = -1,
   predet = 0,
-  constant = TRUE
+  nfactors = NULL
 )
 }
 \arguments{
 \item{formula}{A formula specifying the cointegrating relationship
-(e.g., \code{y ~ x1 + x2}).}
+(e.g., \code{y ~ x1 + x2}). The intercept is never estimated: the
+unit-specific constant of the levels model vanishes when the data are
+first-differenced (Westerlund, 2008, eq. 12).}
 
-\item{data}{A data frame containing panel data.}
+\item{data}{A data frame containing panel data. Missing values in the
+response, the regressors, \code{id} or \code{time} are not allowed; the
+function stops and reports their count and row positions.}
 
 \item{id}{Character string naming the cross-sectional unit identifier.}
 
-\item{time}{Character string naming the time period identifier.}
+\item{time}{Character string naming the time period identifier. Units are
+aligned on this variable (see Details, "Unbalanced panels").}
 
-\item{kmax}{Integer. Maximum number of common factors to consider.
-Default is 5.}
+\item{kmax}{Integer. Maximum number of common factors to consider in the
+search \eqn{k = 0, 1, \ldots, kmax}. Default is 5. Values of at least
+\eqn{\min(N, T - 1)} are reduced to \eqn{\min(N, T - 1) - 1} with a
+message.}
 
 \item{criterion}{Character string specifying the information criterion for
-factor number selection. One of \code{"ic"} (default), \code{"pc"},
-\code{"aic"}, or \code{"bic"}.}
+factor number selection. One of \code{"ic"} (default, the IC criteria of
+Bai and Ng, 2002, eq. 9), \code{"pc"} (their PC criteria), \code{"aic"}
+(their AIC3) or \code{"bic"} (their BIC3).}
 
-\item{penalty}{Integer. Penalty type for factor selection (1, 2, or 3).
-Default is 1.}
+\item{penalty}{Integer 1, 2 or 3 selecting the penalty function
+\eqn{g(N, T)} of the \code{"ic"} and \code{"pc"} criteria (the default,
+\code{NULL}, means 1). Bai and Ng (2002) define a single AIC3 and a single
+BIC3, so \code{penalty} must be \code{NULL} when \code{criterion} is
+\code{"aic"} or \code{"bic"}; any other combination is an error.}
 
-\item{bandwidth}{Integer. Kernel bandwidth for long-run variance estimation.
-If -1 (default), automatic bandwidth selection using Newey-West rule.}
+\item{bandwidth}{Integer. Bartlett kernel bandwidth \eqn{M} for the
+long-run variance estimator. If -1 (default) the rule of Westerlund (2008,
+Section 3.4) is used: \eqn{M = \lfloor 4 (T/100)^{2/9} \rfloor}, the same
+for every unit, where \eqn{T} is the number of time periods in the
+analysed window. This is a fixed function of \eqn{T}, not the
+data-dependent Newey and West (1994) procedure. A value of 0 uses the
+contemporaneous variance only. Values other than -1 or a non-negative
+integer smaller than \eqn{T - 1} are an error.}
 
-\item{predet}{Numeric. If non-zero, uses predetermined coefficient instead
-of OLS estimation. Default is 0 (estimate via OLS).}
+\item{predet}{Numeric. If non-zero, the slope(s) of the first-difference
+regression are not estimated but set to the given value(s) (Westerlund,
+2008, Remark 4). Either a single number applied to every regressor or a
+vector of length \eqn{K}. Default is 0 (estimate the slopes by OLS).}
 
-\item{constant}{Logical. If TRUE (default), includes a constant term.}
+\item{nfactors}{Integer or \code{NULL}. If supplied, the number of common
+factors is fixed at this value (0 means no defactoring) and the
+information criterion is not used. Useful when \code{N} is small (see
+Details).}
 }
 \value{
 An object of class \code{"xtdhcoint"} containing:
@@ -54,11 +76,23 @@ An object of class \code{"xtdhcoint"} containing:
   \item{dhp_z}{Standardized DHp z-statistic.}
   \item{dhg_pval}{P-value for DHg (right-tail).}
   \item{dhp_pval}{P-value for DHp (right-tail).}
-  \item{nf}{Estimated number of common factors.}
+  \item{nf}{Number of common factors used (estimated, or fixed by
+    \code{nfactors}). 0 means that no factor was removed.}
+  \item{nf_at_kmax}{Logical. \code{TRUE} when the information criterion
+    selected the upper bound \code{kmax}.}
+  \item{nfactors}{The value of the \code{nfactors} argument.}
   \item{N}{Number of cross-sectional units.}
-  \item{TT}{Number of time periods.}
+  \item{TT}{Number of time periods in the analysed window.}
+  \item{time_window}{The first and last value of \code{time} in the
+    analysed window.}
+  \item{n_dropped}{Number of observations outside the common time window
+    that were dropped.}
+  \item{K}{Number of regressors.}
   \item{bandwidth}{Bandwidth used.}
+  \item{kmax}{Upper bound of the factor search actually used.}
   \item{criterion}{Information criterion used.}
+  \item{penalty}{Penalty function used (\code{NA} for \code{"aic"} and
+    \code{"bic"}).}
   \item{call}{The matched call.}
 }
 }
@@ -73,6 +107,17 @@ against the alternative of cointegration. The tests are based on comparing
 OLS and instrumental variable estimators of the autoregressive parameter
 in the cumulated residuals.
 
+\strong{Computation.} Following Westerlund (2008, Section 3.2), for each
+unit the first differences of the response are regressed on the first
+differences of the regressors over \eqn{t = 2, \ldots, T} without an
+intercept (eq. 12). Common factors are extracted from the
+\eqn{(T - 1) \times N} matrix of residuals by principal components, the
+defactored differences are recumulated from zero,
+\eqn{\tilde e_{it} = \sum_{j = 2}^{t} \Delta \tilde e_{ij}} with
+\eqn{\tilde e_{i1} = 0}, and the autoregression (13) is fitted over
+\eqn{t = 2, \ldots, T}. The statistics are therefore invariant to adding a
+constant to the response or to any regressor.
+
 \strong{DHg (Group-mean statistic):}
 Tests the null of no cointegration against the heterogeneous alternative
 that at least some units are cointegrated. Under the null, the standardized
@@ -86,9 +131,51 @@ Under the null, the standardized statistic is asymptotically N(0,1).
 Both statistics are computed using right-tail critical values. Large positive
 values indicate evidence of cointegration.
 
-Cross-sectional dependence is handled by extracting common factors from
-the first-differenced residuals using principal components. The number
-of factors is selected automatically using information criteria.
+\strong{Number of factors.} The number of common factors is selected by
+minimising the chosen criterion over \eqn{k = 0, 1, \ldots, kmax}
+(Westerlund, 2008, Remark 5; Bai and Ng, 2002, Theorem 2). \eqn{k = 0}
+means that no factor is removed. For the \code{"pc"}, \code{"aic"} and
+\code{"bic"} criteria the scale \eqn{\hat\sigma^2} is \eqn{V(kmax)}, as
+allowed by Bai and Ng (2002, p. 201).
+
+\strong{Number of regressors.} The limiting distributions in Westerlund
+(2008, Theorem 1 and Remark 3) do not depend on the regressors, so the
+simulated moments of Remark 2 (5.5464, 36.7673, 0.5005, 0.3348) apply for
+any number of regressors \eqn{K}; there is a single set of critical values.
+What the theory does require is that the regressors are not cointegrated
+among themselves (Assumption 1(d)). With several regressors the user should
+check this condition; the function only reports \eqn{K}. With
+\code{predet} and \eqn{K > 1}, a single value is applied to every
+regressor; supply a vector of length \eqn{K} for different slopes.
+
+\strong{Unbalanced panels.} The test is defined for a balanced panel: the
+common factors \eqn{F_t} are extracted from a \eqn{(T - 1) \times N} matrix
+whose rows are calendar periods shared by all units (Westerlund, 2008,
+Section 3.1 and p. 201), and the criterion of Remark 5 sums over
+\eqn{t = 2, \ldots, T} for every unit. When units are observed over
+different periods the function keeps the common time window, the set of
+values of \code{time} at which every unit is observed, drops the
+observations outside it with a message, and requires that window to consist
+of consecutive periods of the data (no unit may have a gap inside it). If
+the common window has gaps, or fewer than 10 periods, the function stops
+with an error. Duplicate values of \code{time} within a unit are an error.
+
+\strong{Small N and N larger than T.} The limiting distributions of
+Theorem 1 require both \eqn{N} and \eqn{T} to grow, with \eqn{N/T} going
+to zero. In a Monte Carlo study of this version (Westerlund's Section 3.4
+design, nominal 5 percent level, one factor fixed with \code{nfactors = 1},
+1000 replications for each of two seed sets) the null rejection rate was
+38 to 41 percent for DHp with \eqn{N = 2} (\eqn{T = 50} and \eqn{100}),
+23 to 24 percent for DHp with \eqn{N = 5} (\eqn{T = 50} and \eqn{100}),
+and 57 to 60 percent for DHg with \eqn{N = 25} and \eqn{T = 20}. The
+function therefore warns when \eqn{N < 5} or \eqn{N > T}. The Bai and Ng
+(2002) criteria are also asymptotic in both \eqn{N} and \eqn{T}: "for very
+small N or T, the proposed criteria are inadequate" (p. 203). In their
+Table I (\eqn{r = 1}, \eqn{k_{max} = 8}) with \eqn{N = 10}, every criterion
+except BIC3 averages the upper bound 8, whereas BIC3 averages 7.18
+(\eqn{T = 50}) and 5.88 (\eqn{T = 100}). The function warns when \eqn{N < 10} and the
+number of factors is selected automatically; fix the number of factors with
+\code{nfactors} or report results for several values of \code{kmax}.
 }
 \examples{
 # Load example data
@@ -107,4 +194,12 @@ summary(result)
 Westerlund, J. (2008). Panel cointegration tests of the Fisher effect.
 \emph{Journal of Applied Econometrics}, 23(2), 193--233.
 \doi{10.1002/jae.967}
+
+Bai, J. and Ng, S. (2002). Determining the number of factors in approximate
+factor models. \emph{Econometrica}, 70(1), 191--221.
+\doi{10.1111/1468-0262.00273}
+
+Newey, W. K. and West, K. D. (1994). Automatic lag selection in covariance
+matrix estimation. \emph{Review of Economic Studies}, 61(4), 631--653.
+\doi{10.2307/2297912}
 }
